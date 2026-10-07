@@ -158,7 +158,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"caminar",
-"speed": 10.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -204,7 +204,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"respirar",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -236,7 +236,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"saltar",
-"speed": 10.0
+"speed": 15.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wbahe"]
@@ -250,9 +250,9 @@ script = ExtResource("5_script")
 [node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=98582841]
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_t1h4l")
-animation = &"caminar"
+animation = &"respirar"
 autoplay = "respirar"
-frame_progress = 0.17448208
+frame_progress = 0.8857997
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=852678253]
 position = Vector2(1, 1)
