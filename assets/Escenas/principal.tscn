@@ -10,6 +10,10 @@ script = ExtResource("1_script")
 
 [node name="NivelLargo" parent="." instance=ExtResource("2_nivel")]
 
+[node name="Monedas" type="Node2D" parent="."]
+
+[node name="Slimes" type="Node2D" parent="."]
+
 [node name="Jugador" parent="." instance=ExtResource("3_jugador")]
 
 [node name="HUD" parent="." instance=ExtResource("4_hud")]

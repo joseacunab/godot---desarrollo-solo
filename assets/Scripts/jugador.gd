@@ -4,12 +4,20 @@ extends CharacterBody2D
 const SPEED = 300.0
 const JUMP_VELOCITY = -550.0
 
+const REBOTE_VELOCITY = -400.0
+
 signal vidas_cambiadas(vidas: int)
+signal monedas_cambiadas(monedas: int)
 
 var vidas := 3:
 	set(valor):
 		vidas = valor
 		vidas_cambiadas.emit(vidas)
+
+var monedas := 0:
+	set(valor):
+		monedas = valor
+		monedas_cambiadas.emit(monedas)
 
 @onready var anim = $Sprite2D
 
@@ -40,3 +48,14 @@ func _physics_process(delta: float) -> void:
 		anim.play("caminar")
 	else:
 		anim.play("respirar")
+
+
+# Altura global de la base de la colisión (los pies).
+func pies_y() -> float:
+	var colision: CollisionShape2D = $CollisionShape2D
+	return colision.global_position.y + colision.shape.get_rect().end.y
+
+
+# Impulso hacia arriba al aplastar a un enemigo.
+func rebotar() -> void:
+	velocity.y = REBOTE_VELOCITY

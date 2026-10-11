@@ -31,13 +31,16 @@ res://
 └── assets/
     ├── Escenas/
     │   ├── principal.tscn        # Escena principal: nivel largo + jugador
-│   ├── nivel_largo.tscn      # Nivel actual (6400×768)
+    │   ├── nivel_largo.tscn      # Nivel actual (6400×768)
     │   ├── jugador.tscn          # Escena del explorador
-│   ├── hud.tscn              # HUD (CanvasLayer) con la etiqueta de vidas
-    │   └── mapa.tscn             # Mapa de prueba antiguo (no se usa)
+    │   ├── hud.tscn              # HUD (CanvasLayer): vidas y monedas
+    │   ├── moneda.tscn           # Area2D, se recoge al tocarla
+    │   └── slime.tscn            # CharacterBody2D que patrulla
     ├── Scripts/
-    │   ├── principal.gd          # Coloca al jugador, vidas y zona de muerte
-    │   ├── hud.gd                # Muestra las vidas (señal vidas_cambiadas)
+    │   ├── principal.gd          # Coloca al jugador, vidas, zona de muerte, instancia monedas y slimes
+    │   ├── hud.gd                # Muestra vidas y monedas (señales vidas_cambiadas / monedas_cambiadas)
+    │   ├── moneda.gd             # Suma 1 a jugador.monedas y desaparece
+    │   ├── slime.gd              # Patrulla; golpe de costado o aplastamiento
     │   └── jugador.gd            # Movimiento y animación del jugador
     ├── Personaje principal/      # Sprites del explorador
     │   ├── respirar/  respirar_00..04.png   + respirar_strip.png
@@ -67,12 +70,20 @@ Cada animación existe dos veces: como frames sueltos (`<anim>/<anim>_NN.png`) y
 ```
 Principal (Node2D, principal.gd)
 ├── NivelLargo   instancia de nivel_largo.tscn
+├── Monedas      Node2D: una moneda.tscn por marcador de NivelLargo/Marcadores/Monedas
+├── Slimes       Node2D: un slime.tscn por marcador de NivelLargo/Marcadores/Slimes
 ├── Jugador      instancia de jugador.tscn
 └── HUD          instancia de hud.tscn (CanvasLayer, fijo en pantalla)
 ```
 `principal.gd` coloca al jugador en el marcador `NivelLargo/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
 
-Vidas: `jugador.gd` tiene `var vidas := 3`. Al entrar en `NivelLargo/ZonaMuerte`, `principal.gd` resta una vida y llama a `colocar_jugador()` (marcador + velocidad a cero); si llega a 0 hace `reload_current_scene()`.
+Vidas: `jugador.gd` tiene `var vidas := 3`. `principal.gd` llama a `perder_vida()` al entrar en `NivelLargo/ZonaMuerte` o cuando un slime emite `jugador_golpeado`: resta una vida y llama a `colocar_jugador()` (marcador + velocidad a cero); si llega a 0 hace `reload_current_scene()`.
+
+Monedas y slimes: las instancias toman el nombre de su marcador (`Moneda1`, `Slime1`...). El marcador de moneda es su centro; el de slime, sus pies (el origen de `slime.tscn` está en la base). Cada slime tiene una excepción de colisión con el jugador: no se empujan, el contacto lo detecta el `Area2D` `Deteccion` del slime.
+
+### `assets/Escenas/moneda.tscn` y `assets/Escenas/slime.tscn`
+- **Moneda** (Area2D, `moneda.gd`): `AnimatedSprite2D` con `moneda_frames.tres`, animación `girar`, escala 0.25; `CircleShape2D` r=18. Cuando la toca un cuerpo del grupo `jugador`, suma 1 a `monedas` y hace `queue_free()`.
+- **Slime** (CharacterBody2D, `slime.gd`, capa de colisión 3 = valor 4, máscara 1): `slime_frames.tres` (`respirar`), escala 0.45, colisión 76×46. Tiene gravedad y `VELOCIDAD = 60`; da la vuelta con `is_on_wall()` o cuando el `RayCast2D` `DetectorBorde` (delante y hacia abajo) deja de tocar suelo. Si el jugador entra en `Deteccion` cayendo (`velocity.y > 0`) con los pies (`pies_y()`) por encima del centro del slime, el jugador llama a `rebotar()` y el slime muere; si no, emite `jugador_golpeado`.
 
 ### `assets/Escenas/jugador.tscn` — el explorador
 ```
@@ -86,7 +97,8 @@ jugador (CharacterBody2D, jugador.gd)
 
 ### `assets/Scripts/jugador.gd`
 - `extends CharacterBody2D`; `SPEED = 300.0`, `JUMP_VELOCITY = -550.0`.
-- `var vidas := 3` con setter que emite `vidas_cambiadas(vidas)`; las gestiona `principal.gd` y las muestra el HUD (`hud.seguir_jugador(jugador)` en `principal.gd`).
+- `var vidas := 3` y `var monedas := 0`, con setters que emiten `vidas_cambiadas` y `monedas_cambiadas`; las vidas las gestiona `principal.gd` y ambas las muestra el HUD (`hud.seguir_jugador(jugador)`).
+- Raíz en el grupo `jugador`. `pies_y()` devuelve la altura global de la base de la colisión; `rebotar()` pone `velocity.y = REBOTE_VELOCITY` (-400).
 - Gravedad con `get_gravity()`, salto con `ui_accept` sólo en el suelo, voltea el sprite con `flip_h`.
 - Animación: `saltar` si sube en el aire, `caminar` si hay dirección, si no `respirar`. `recoger` todavía no se usa.
 - El nodo de animación se llama `Sprite2D` aunque es un `AnimatedSprite2D` (`@onready var anim = $Sprite2D`).
@@ -115,13 +127,13 @@ NivelSelva (Node2D)
       Murcielago1 (1246,218), Murcielago2 (1342,532)
       Monedas/ Moneda1..Moneda14
 ```
-Los marcadores sólo guardan posiciones. `principal.gd` usa el de `Jugador`; todavía no hay código que instancie enemigos ni monedas.
+Los marcadores sólo guardan posiciones. Este nivel ya no se usa: `principal.gd` lee los marcadores `Jugador`, `Monedas` y `Slimes` de `nivel_largo.tscn`.
 
 ## Estado actual y problemas conocidos
 
 - `mapa.tscn` no se usa en ninguna parte. Sus `CollisionShape2D` cuelgan de un `Node2D` y no de un `StaticBody2D`, así que no generan colisión. Las colisiones válidas están en `nivel_selva.tscn`.
 - **Murciélagos:** sólo existen los marcadores en `nivel_selva.tscn`; no hay sprites ni escenas.
-- **Slimes y monedas:** hay sprites y `SpriteFrames`, pero no escenas ni scripts (sin IA, sin recogida, sin contador).
+- **Slimes:** el sprite es frontal, así que no se voltea al cambiar de sentido. No hay invulnerabilidad tras recibir un golpe: el `Slime1` patrulla por el punto de aparición (x 41–920).
 - Nombres de carpetas con mayúsculas y espacios (`Personaje principal`); cuidado al escribir rutas `res://`.
 
 ## Convenciones

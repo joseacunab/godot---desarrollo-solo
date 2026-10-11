@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://assets/Scripts/slime.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://assets/Enemigo/slime_frames.tres" id="2_frames"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cuerpo"]
+size = Vector2(76, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_deteccion"]
+size = Vector2(84, 52)
+
+[node name="Slime" type="CharacterBody2D"]
+collision_layer = 4
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -42)
+scale = Vector2(0.45, 0.45)
+sprite_frames = ExtResource("2_frames")
+animation = &"respirar"
+autoplay = "respirar"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -23)
+shape = SubResource("RectangleShape2D_cuerpo")
+
+[node name="DetectorBorde" type="RayCast2D" parent="."]
+position = Vector2(-42, -4)
+target_position = Vector2(0, 20)
+
+[node name="Deteccion" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Deteccion"]
+position = Vector2(0, -26)
+shape = SubResource("RectangleShape2D_deteccion")
