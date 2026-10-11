@@ -175,6 +175,12 @@ Los marcadores sólo guardan posiciones. Este nivel ya no se usa: `principal.gd`
 - Nombres de animación en español e infinitivo: `respirar`, `caminar`, `saltar`, `recoger`, `girar`.
 - Editar `.tscn`/`.tres` a mano es posible, pero conserva los `uid` y las rutas `res://` exactas.
 
+## Exportación
+
+- `export_presets.cfg`: preset `Windows Desktop` (x86_64), PCK incrustado (`binary_format/embed_pck=true`) y sin consola auxiliar (`debug/export_console_wrapper=0`), así que sale un único `.exe`. Plantillas en `%APPDATA%\Godot\export_templates\4.7.2.stable\`.
+- Exportar (crea antes `build/`): `Godot_v4.7.2-stable_win64_console.exe --headless --path . --export-release "Windows Desktop" "build/El Tesoro de la Jungla.exe"`. Ocupa unos 114 MB; `build/` no se guarda en Git.
+- Comprobar el ejecutable: el `.exe` exportado no escribe en la consola. Usa `--quit-after <frames> --verbose --log-file <ruta>` para que salga solo y deje registro (si se cierra a la fuerza, el registro queda vacío).
+
 ## Flujo de trabajo
 
 - **Commit automático:** al terminar cada tarea y comprobar que funciona, haz commit sin esperar a que se pida. Incluye los archivos que genera Godot y que acompañan a los cambios (`*.uid`, `*.import`). Si la tarea no funciona o la prueba falla, no hagas commit: explica el problema.
