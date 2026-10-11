@@ -33,14 +33,16 @@ res://
     │   ├── principal.tscn        # Escena principal: nivel largo + jugador
     │   ├── nivel_largo.tscn      # Nivel actual (6400×768)
     │   ├── jugador.tscn          # Escena del explorador
-    │   ├── hud.tscn              # HUD (CanvasLayer): vidas y monedas
+    │   ├── hud.tscn              # HUD (CanvasLayer): vidas, monedas y pantalla de nivel completado
     │   ├── moneda.tscn           # Area2D, se recoge al tocarla
-    │   └── slime.tscn            # CharacterBody2D que patrulla
+    │   ├── slime.tscn            # CharacterBody2D que patrulla
+    │   └── meta.tscn             # Area2D con mástil y bandera (fin del nivel)
     ├── Scripts/
     │   ├── principal.gd          # Coloca al jugador, vidas, zona de muerte, instancia monedas y slimes
-    │   ├── hud.gd                # Muestra vidas y monedas (señales vidas_cambiadas / monedas_cambiadas)
+    │   ├── hud.gd                # Vidas y monedas (señales) y pantalla "¡Nivel completado!"
     │   ├── moneda.gd             # Suma 1 a jugador.monedas y desaparece
     │   ├── slime.gd              # Patrulla; golpe de costado o aplastamiento
+    │   ├── meta.gd               # Emite alcanzada al tocarla el jugador
     │   └── jugador.gd            # Movimiento y animación del jugador
     ├── Personaje principal/      # Sprites del explorador
     │   ├── respirar/  respirar_00..04.png   + respirar_strip.png
@@ -72,14 +74,20 @@ Principal (Node2D, principal.gd)
 ├── NivelLargo   instancia de nivel_largo.tscn
 ├── Monedas      Node2D: una moneda.tscn por marcador de NivelLargo/Marcadores/Monedas
 ├── Slimes       Node2D: un slime.tscn por marcador de NivelLargo/Marcadores/Slimes
+├── Meta         instancia de meta.tscn, colocada en NivelLargo/Marcadores/Meta
 ├── Jugador      instancia de jugador.tscn
-└── HUD          instancia de hud.tscn (CanvasLayer, fijo en pantalla)
+└── HUD          instancia de hud.tscn (CanvasLayer, process_mode = Always, fijo en pantalla)
 ```
 `principal.gd` coloca al jugador en el marcador `NivelLargo/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
 
 Vidas: `jugador.gd` tiene `var vidas := 3`. `principal.gd` llama a `perder_vida()` al entrar en `NivelLargo/ZonaMuerte` o cuando un slime emite `jugador_golpeado`: resta una vida, hace al jugador invencible (`volverse_invencible()`) y llama a `colocar_jugador()` (marcador + velocidad a cero); si llega a 0 hace `reload_current_scene()`. La zona de muerte quita vida aunque el jugador sea invencible.
 
 Monedas y slimes: las instancias toman el nombre de su marcador (`Moneda1`, `Slime1`...). El marcador de moneda es su centro; el de slime, sus pies (el origen de `slime.tscn` está en la base). Cada slime tiene una excepción de colisión con el jugador: no se empujan, el contacto lo detecta el `Area2D` `Deteccion` del slime.
+
+### Meta y fin del nivel
+- **Meta** (Area2D, `meta.gd`): mástil y bandera hechos con `Polygon2D` (no hay sprite), colisión 64×160 con el origen en la base. Al entrar el jugador emite `alcanzada` una sola vez.
+- `principal.gd` la coloca en el marcador `Meta` (6272, 640). Al alcanzarla llama a `hud.mostrar_nivel_completado(jugador.monedas, total_monedas)` y pausa el árbol (`paused = true`, diferido). `total_monedas` es el número de monedas instanciadas (28).
+- El HUD tiene `process_mode = Always`, así que sigue activo en pausa. El panel `NivelCompletado` (ColorRect semitransparente, oculto al empezar) muestra "¡Nivel completado!", "Monedas: N / 28" y el botón `VolverAJugar` (recibe el foco con `grab_focus()`). El botón quita la pausa y llama a `reload_current_scene()`.
 
 ### `assets/Escenas/moneda.tscn` y `assets/Escenas/slime.tscn`
 - **Moneda** (Area2D, `moneda.gd`): `AnimatedSprite2D` con `moneda_frames.tres`, animación `girar`, escala 0.25; `CircleShape2D` r=18. Cuando la toca un cuerpo del grupo `jugador`, suma 1 a `monedas` y hace `queue_free()`.
@@ -147,3 +155,6 @@ Los marcadores sólo guardan posiciones. Este nivel ya no se usa: `principal.gd`
 
 - **Commit automático:** al terminar cada tarea y comprobar que funciona, haz commit sin esperar a que se pida. Incluye los archivos que genera Godot y que acompañan a los cambios (`*.uid`, `*.import`). Si la tarea no funciona o la prueba falla, no hagas commit: explica el problema.
 - Para probar, usa Godot sin ventana: `C:\Users\Administrador\Downloads\Godot_v4.7.2-stable_win64_console.exe --headless --path . --script <prueba.gd>` (antes, `--import` si hay archivos nuevos). Guarda los scripts de prueba fuera del proyecto.
+  - Ejecuta con `timeout 60 ...`: si el script de prueba falla, Godot no sale solo y se queda colgado.
+  - Sin ventana, la ventana mide 64×64 y el viewport visible 1152×1152 (estiramiento `expand`). Para simular clics usa `root.push_input(evento, true)` con coordenadas del viewport.
+  - Después de `reload_current_scene()` la escena vieja queda liberada: comprueba `current_scene` antes de usarla.

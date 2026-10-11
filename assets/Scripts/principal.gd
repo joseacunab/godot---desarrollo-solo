@@ -7,6 +7,10 @@ const ESCENA_SLIME = preload("res://assets/Escenas/slime.tscn")
 @onready var marcador: Marker2D = $NivelLargo/Marcadores/Jugador
 @onready var zona_muerte: Area2D = $NivelLargo/ZonaMuerte
 @onready var hud: CanvasLayer = $HUD
+@onready var meta: Area2D = $Meta
+
+# Monedas que hay en el nivel (una por marcador).
+var total_monedas := 0
 
 
 func _ready() -> void:
@@ -15,6 +19,9 @@ func _ready() -> void:
 	colocar_jugador()
 	crear_monedas()
 	crear_slimes()
+	# El marcador Meta indica la base del mástil.
+	meta.global_position = $NivelLargo/Marcadores/Meta.global_position
+	meta.alcanzada.connect(_on_meta_alcanzada)
 
 
 func colocar_jugador() -> void:
@@ -33,6 +40,7 @@ func crear_monedas() -> void:
 		moneda.name = m.name
 		moneda.position = m.global_position
 		$Monedas.add_child(moneda)
+	total_monedas = $Monedas.get_child_count()
 
 
 # Un slime en cada marcador de NivelLargo/Marcadores/Slimes (los pies del slime).
@@ -56,6 +64,12 @@ func perder_vida() -> void:
 		# Invencible desde ya, para que otro slime no lo golpee en este mismo frame.
 		jugador.volverse_invencible()
 		colocar_jugador.call_deferred()
+
+
+func _on_meta_alcanzada() -> void:
+	hud.mostrar_nivel_completado(jugador.monedas, total_monedas)
+	# Se pausa todo menos el HUD (diferido, estamos en un callback de física).
+	get_tree().set_deferred("paused", true)
 
 
 func _on_zona_muerte_body_entered(cuerpo: Node2D) -> void:

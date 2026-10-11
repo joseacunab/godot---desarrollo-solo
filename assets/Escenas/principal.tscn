@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://assets/Scripts/principal.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/Escenas/nivel_largo.tscn" id="2_nivel"]
 [ext_resource type="PackedScene" uid="uid://k77gwox5cbfq" path="res://assets/Escenas/jugador.tscn" id="3_jugador"]
 [ext_resource type="PackedScene" path="res://assets/Escenas/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://assets/Escenas/meta.tscn" id="5_meta"]
 
 [node name="Principal" type="Node2D"]
 script = ExtResource("1_script")
@@ -13,6 +14,8 @@ script = ExtResource("1_script")
 [node name="Monedas" type="Node2D" parent="."]
 
 [node name="Slimes" type="Node2D" parent="."]
+
+[node name="Meta" parent="." instance=ExtResource("5_meta")]
 
 [node name="Jugador" parent="." instance=ExtResource("3_jugador")]
 
