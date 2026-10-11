@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 # Se emite cuando el slime toca al jugador de costado.
 signal jugador_golpeado
+# Se emite cuando el jugador lo aplasta, justo antes de desaparecer.
+signal aplastado
 
 const VELOCIDAD = 60.0
 
@@ -45,6 +47,7 @@ func _tocar_jugador(jugador: CharacterBody2D) -> void:
 	var centro_y := cuerpo.global_position.y
 	if jugador.velocity.y > 0.0 and jugador.pies_y() < centro_y:
 		jugador.rebotar()
+		aplastado.emit()
 		queue_free()
 	elif not jugador.es_invencible():
 		jugador_golpeado.emit()

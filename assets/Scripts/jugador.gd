@@ -10,6 +10,7 @@ const PERIODO_PARPADEO = 0.2
 
 signal vidas_cambiadas(vidas: int)
 signal monedas_cambiadas(monedas: int)
+signal salto
 
 var vidas := 3:
 	set(valor):
@@ -40,6 +41,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		salto.emit()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.

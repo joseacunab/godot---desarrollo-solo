@@ -15,6 +15,7 @@ var total_monedas := 0
 
 func _ready() -> void:
 	zona_muerte.body_entered.connect(_on_zona_muerte_body_entered)
+	jugador.salto.connect(Sonidos.get_node("Saltar").play)
 	hud.seguir_jugador(jugador)
 	colocar_jugador()
 	crear_monedas()
@@ -39,6 +40,7 @@ func crear_monedas() -> void:
 		var moneda := ESCENA_MONEDA.instantiate()
 		moneda.name = m.name
 		moneda.position = m.global_position
+		moneda.recogida.connect(Sonidos.get_node("Moneda").play)
 		$Monedas.add_child(moneda)
 	total_monedas = $Monedas.get_child_count()
 
@@ -51,7 +53,8 @@ func crear_slimes() -> void:
 		slime.position = m.global_position
 		# El slime no choca físicamente con el jugador; el contacto lo detecta su Area2D.
 		slime.add_collision_exception_with(jugador)
-		slime.jugador_golpeado.connect(perder_vida)
+		slime.jugador_golpeado.connect(_on_slime_jugador_golpeado)
+		slime.aplastado.connect(Sonidos.get_node("Aplastar").play)
 		$Slimes.add_child(slime)
 
 
@@ -67,6 +70,7 @@ func perder_vida() -> void:
 
 
 func _on_meta_alcanzada() -> void:
+	Sonidos.get_node("Meta").play()
 	hud.mostrar_nivel_completado(jugador.monedas, total_monedas)
 	# Se pausa todo menos el HUD (diferido, estamos en un callback de física).
 	get_tree().set_deferred("paused", true)
@@ -74,4 +78,10 @@ func _on_meta_alcanzada() -> void:
 
 func _on_zona_muerte_body_entered(cuerpo: Node2D) -> void:
 	if cuerpo == jugador:
+		Sonidos.get_node("Caer").play()
 		perder_vida()
+
+
+func _on_slime_jugador_golpeado() -> void:
+	Sonidos.get_node("Golpe").play()
+	perder_vida()

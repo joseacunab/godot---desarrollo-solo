@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="AudioStream" uid="uid://bi2f3mnxs88lk" path="res://assets/Sonidos/saltar.wav" id="1_saltar"]
+[ext_resource type="AudioStream" uid="uid://5q2el8wf5anu" path="res://assets/Sonidos/moneda.wav" id="2_moneda"]
+[ext_resource type="AudioStream" uid="uid://gphs0qnkajno" path="res://assets/Sonidos/golpe.wav" id="3_golpe"]
+[ext_resource type="AudioStream" uid="uid://dao6llqt42wt4" path="res://assets/Sonidos/aplastar.wav" id="4_aplastar"]
+[ext_resource type="AudioStream" uid="uid://3dqdnvuw7vx5" path="res://assets/Sonidos/caer.wav" id="5_caer"]
+[ext_resource type="AudioStream" uid="uid://ci5lq5tkkmihb" path="res://assets/Sonidos/meta.wav" id="6_meta"]
+
+[node name="Sonidos" type="Node"]
+process_mode = 3
+
+[node name="Saltar" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_saltar")
+volume_db = -8.0
+
+[node name="Moneda" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_moneda")
+volume_db = -8.0
+
+[node name="Golpe" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_golpe")
+volume_db = -8.0
+
+[node name="Aplastar" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_aplastar")
+volume_db = -8.0
+
+[node name="Caer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_caer")
+volume_db = -8.0
+
+[node name="Meta" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_meta")
+volume_db = -8.0

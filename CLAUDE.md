@@ -20,6 +20,7 @@ Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en
 - Física 3D: Jolt (no afecta al 2D). Renderizador en Windows: D3D12.
 - Escena principal (`run/main_scene`): `res://assets/Escenas/principal.tscn`.
 - No hay acciones de input propias: el jugador usa `ui_left`, `ui_right` y `ui_accept`.
+- Autoload `Sonidos` = `res://assets/Escenas/sonidos.tscn` (sección `[autoload]`).
 - `.editorconfig`: UTF-8. `.gitattributes`: finales de línea LF. `.gitignore` excluye `.godot/` y `/android/`.
 
 ## Estructura de carpetas
@@ -36,13 +37,15 @@ res://
     │   ├── hud.tscn              # HUD (CanvasLayer): vidas, monedas y pantalla de nivel completado
     │   ├── moneda.tscn           # Area2D, se recoge al tocarla
     │   ├── slime.tscn            # CharacterBody2D que patrulla
-    │   └── meta.tscn             # Area2D con mástil y bandera (fin del nivel)
+    │   ├── meta.tscn             # Area2D con mástil y bandera (fin del nivel)
+    │   └── sonidos.tscn          # Autoload: un AudioStreamPlayer por efecto de sonido
     ├── Scripts/
     │   ├── principal.gd          # Coloca al jugador, vidas, zona de muerte, instancia monedas y slimes
     │   ├── hud.gd                # Vidas y monedas (señales) y pantalla "¡Nivel completado!"
     │   ├── moneda.gd             # Suma 1 a jugador.monedas y desaparece
     │   ├── slime.gd              # Patrulla; golpe de costado o aplastamiento
     │   ├── meta.gd               # Emite alcanzada al tocarla el jugador
+    │   ├── generar_sonidos.gd    # Sintetiza los .wav de assets/Sonidos/ (se ejecuta a mano)
     │   └── jugador.gd            # Movimiento y animación del jugador
     ├── Personaje principal/      # Sprites del explorador
     │   ├── respirar/  respirar_00..04.png   + respirar_strip.png
@@ -54,6 +57,8 @@ res://
     │   ├── respirar/  slime_respirar_00..02.png
     │   ├── slime_respirar_strip.png
     │   └── slime_frames.tres
+    ├── Sonidos/                  # Efectos 8 bits generados (22050 Hz, 16 bits, mono)
+    │   └── saltar, moneda, golpe, aplastar, caer, meta (.wav)
     ├── Moneda/
     │   ├── girar/     moneda_00..07.png
     │   ├── moneda_girar_strip.png
@@ -83,6 +88,11 @@ Principal (Node2D, principal.gd)
 Vidas: `jugador.gd` tiene `var vidas := 3`. `principal.gd` llama a `perder_vida()` al entrar en `NivelLargo/ZonaMuerte` o cuando un slime emite `jugador_golpeado`: resta una vida, hace al jugador invencible (`volverse_invencible()`) y llama a `colocar_jugador()` (marcador + velocidad a cero); si llega a 0 hace `reload_current_scene()`. La zona de muerte quita vida aunque el jugador sea invencible.
 
 Monedas y slimes: las instancias toman el nombre de su marcador (`Moneda1`, `Slime1`...). El marcador de moneda es su centro; el de slime, sus pies (el origen de `slime.tscn` está en la base). Cada slime tiene una excepción de colisión con el jugador: no se empujan, el contacto lo detecta el `Area2D` `Deteccion` del slime.
+
+### Sonidos
+- `assets/Sonidos/*.wav` se generan con `generar_sonidos.gd` (ondas cuadradas con barridos de frecuencia, notas y ruido). Para regenerarlos: `Godot_v4.7.2-stable_win64_console.exe --headless --path . --script res://assets/Scripts/generar_sonidos.gd` y después `--import`.
+- `sonidos.tscn` (Node, `process_mode = Always`) es un autoload con los reproductores `Saltar`, `Moneda`, `Golpe`, `Aplastar`, `Caer` y `Meta`, todos a `volume_db = -8`. Al ser autoload sobrevive a `reload_current_scene()` (el sonido de la última vida no se corta) y suena con el juego en pausa (meta).
+- `principal.gd` los conecta: `jugador.salto` → Saltar; `moneda.recogida` → Moneda; `slime.jugador_golpeado` → Golpe + `perder_vida()`; `slime.aplastado` → Aplastar; zona de muerte → Caer + `perder_vida()`; meta → Meta.
 
 ### Meta y fin del nivel
 - **Meta** (Area2D, `meta.gd`): mástil y bandera hechos con `Polygon2D` (no hay sprite), colisión 64×160 con el origen en la base. Al entrar el jugador emite `alcanzada` una sola vez.
