@@ -3,7 +3,14 @@ extends CharacterBody2D
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -550.0
-var vidas := 3
+
+signal vidas_cambiadas(vidas: int)
+
+var vidas := 3:
+	set(valor):
+		vidas = valor
+		vidas_cambiadas.emit(vidas)
+
 @onready var anim = $Sprite2D
 
 func _physics_process(delta: float) -> void:

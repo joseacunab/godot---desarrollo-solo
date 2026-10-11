@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://assets/Scripts/principal.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/Escenas/nivel_largo.tscn" id="2_nivel"]
 [ext_resource type="PackedScene" uid="uid://k77gwox5cbfq" path="res://assets/Escenas/jugador.tscn" id="3_jugador"]
+[ext_resource type="PackedScene" path="res://assets/Escenas/hud.tscn" id="4_hud"]
 
 [node name="Principal" type="Node2D"]
 script = ExtResource("1_script")
@@ -10,3 +11,5 @@ script = ExtResource("1_script")
 [node name="NivelLargo" parent="." instance=ExtResource("2_nivel")]
 
 [node name="Jugador" parent="." instance=ExtResource("3_jugador")]
+
+[node name="HUD" parent="." instance=ExtResource("4_hud")]

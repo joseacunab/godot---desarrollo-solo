@@ -33,9 +33,11 @@ res://
     │   ├── principal.tscn        # Escena principal: nivel largo + jugador
 │   ├── nivel_largo.tscn      # Nivel actual (6400×768)
     │   ├── jugador.tscn          # Escena del explorador
+│   ├── hud.tscn              # HUD (CanvasLayer) con la etiqueta de vidas
     │   └── mapa.tscn             # Mapa de prueba antiguo (no se usa)
     ├── Scripts/
     │   ├── principal.gd          # Coloca al jugador, vidas y zona de muerte
+    │   ├── hud.gd                # Muestra las vidas (señal vidas_cambiadas)
     │   └── jugador.gd            # Movimiento y animación del jugador
     ├── Personaje principal/      # Sprites del explorador
     │   ├── respirar/  respirar_00..04.png   + respirar_strip.png
@@ -65,7 +67,8 @@ Cada animación existe dos veces: como frames sueltos (`<anim>/<anim>_NN.png`) y
 ```
 Principal (Node2D, principal.gd)
 ├── NivelLargo   instancia de nivel_largo.tscn
-└── Jugador      instancia de jugador.tscn
+├── Jugador      instancia de jugador.tscn
+└── HUD          instancia de hud.tscn (CanvasLayer, fijo en pantalla)
 ```
 `principal.gd` coloca al jugador en el marcador `NivelLargo/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
 
@@ -83,7 +86,7 @@ jugador (CharacterBody2D, jugador.gd)
 
 ### `assets/Scripts/jugador.gd`
 - `extends CharacterBody2D`; `SPEED = 300.0`, `JUMP_VELOCITY = -550.0`.
-- `var vidas := 3` (las gestiona `principal.gd`).
+- `var vidas := 3` con setter que emite `vidas_cambiadas(vidas)`; las gestiona `principal.gd` y las muestra el HUD (`hud.seguir_jugador(jugador)` en `principal.gd`).
 - Gravedad con `get_gravity()`, salto con `ui_accept` sólo en el suelo, voltea el sprite con `flip_h`.
 - Animación: `saltar` si sube en el aire, `caminar` si hay dirección, si no `respirar`. `recoger` todavía no se usa.
 - El nodo de animación se llama `Sprite2D` aunque es un `AnimatedSprite2D` (`@onready var anim = $Sprite2D`).

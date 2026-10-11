@@ -3,10 +3,12 @@ extends Node2D
 @onready var jugador: CharacterBody2D = $Jugador
 @onready var marcador: Marker2D = $NivelLargo/Marcadores/Jugador
 @onready var zona_muerte: Area2D = $NivelLargo/ZonaMuerte
+@onready var hud: CanvasLayer = $HUD
 
 
 func _ready() -> void:
 	zona_muerte.body_entered.connect(_on_zona_muerte_body_entered)
+	hud.seguir_jugador(jugador)
 	colocar_jugador()
 
 
