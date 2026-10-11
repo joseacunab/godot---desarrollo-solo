@@ -18,7 +18,7 @@ Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en
 - Estiramiento: `canvas_items` / `expand`.
 - Filtro de texturas por defecto: `0` (Nearest, pixel art).
 - Física 3D: Jolt (no afecta al 2D). Renderizador en Windows: D3D12.
-- Escena principal (`run/main_scene`): `res://assets/Escenas/principal.tscn`.
+- Escena principal (`run/main_scene`): `res://assets/Escenas/inicio.tscn` (pantalla de inicio, que lleva a `principal.tscn`).
 - No hay acciones de input propias: el jugador usa `ui_left`, `ui_right` y `ui_accept`.
 - Autoload `Sonidos` = `res://assets/Escenas/sonidos.tscn` (sección `[autoload]`).
 - `.editorconfig`: UTF-8. `.gitattributes`: finales de línea LF. `.gitignore` excluye `.godot/` y `/android/`.
@@ -31,7 +31,8 @@ res://
 ├── icon.svg
 └── assets/
     ├── Escenas/
-    │   ├── principal.tscn        # Escena principal: nivel largo + jugador
+    │   ├── inicio.tscn           # Pantalla de inicio (escena principal del proyecto)
+    │   ├── principal.tscn        # Nivel en juego: nivel largo + jugador
     │   ├── nivel_largo.tscn      # Nivel actual (6400×768)
     │   ├── jugador.tscn          # Escena del explorador
     │   ├── hud.tscn              # HUD (CanvasLayer): vidas, monedas y pantalla de nivel completado
@@ -40,6 +41,7 @@ res://
     │   ├── meta.tscn             # Area2D con mástil y bandera (fin del nivel)
     │   └── sonidos.tscn          # Autoload: un AudioStreamPlayer por efecto de sonido
     ├── Scripts/
+    │   ├── inicio.gd             # Botón Jugar / Enter -> principal.tscn
     │   ├── principal.gd          # Coloca al jugador, vidas, zona de muerte, instancia monedas y slimes
     │   ├── hud.gd                # Vidas y monedas (señales) y pantalla "¡Nivel completado!"
     │   ├── moneda.gd             # Suma 1 a jugador.monedas y desaparece
@@ -72,6 +74,18 @@ res://
 Cada animación existe dos veces: como frames sueltos (`<anim>/<anim>_NN.png`) y como tira horizontal (`<anim>_strip.png`). `jugador.tscn` usa las **tiras** recortadas con `AtlasTexture`; los `.tres` usan los frames sueltos.
 
 ## Escenas
+
+### `assets/Escenas/inicio.tscn` — pantalla de inicio
+```
+Inicio (Node2D, inicio.gd)
+├── Fondo (Parallax2D)   fondo_selva.png, autoscroll (-40, 0), repeat_size 1253, repeat_times 3
+└── Interfaz (CanvasLayer)
+    └── Centro (CenterContainer) / Caja (VBoxContainer)
+        ├── Titulo   "Juego desarrollado solo", 80 px, amarillo con borde
+        └── Jugar    Button
+```
+- `inicio.gd`: el botón recibe el foco en `_ready()`, así que Enter (`ui_accept`) lo pulsa. Si pierde el foco, `_unhandled_input` también responde a `ui_accept`. Ambos llaman a `change_scene_to_file("res://assets/Escenas/principal.tscn")`.
+- El Enter que pulsa "Jugar" no hace saltar al jugador al empezar el nivel.
 
 ### `assets/Escenas/principal.tscn` — escena principal
 ```
