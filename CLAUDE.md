@@ -21,7 +21,7 @@ Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en
 - Escena principal (`run/main_scene`): `res://assets/Escenas/inicio.tscn` (pantalla de inicio, que lleva a `principal.tscn`).
 - No hay acciones de input propias: el jugador usa `ui_left`, `ui_right` y `ui_accept`.
 - Autoload `Sonidos` = `res://assets/Escenas/sonidos.tscn` (sección `[autoload]`).
-- `.editorconfig`: UTF-8. `.gitattributes`: finales de línea LF. `.gitignore` excluye `.godot/` y `/android/`.
+- `.editorconfig`: UTF-8. `.gitattributes`: finales de línea LF. `.gitignore` excluye `.godot/`, `/android/` y `build/`.
 
 ## Estructura de carpetas
 
