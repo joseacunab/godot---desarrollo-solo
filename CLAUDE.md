@@ -129,3 +129,8 @@ Los marcadores sólo guardan posiciones. `principal.gd` usa el de `Jugador`; tod
 - Escenas en `assets/Escenas/`, scripts en `assets/Scripts/`, arte agrupado por entidad.
 - Nombres de animación en español e infinitivo: `respirar`, `caminar`, `saltar`, `recoger`, `girar`.
 - Editar `.tscn`/`.tres` a mano es posible, pero conserva los `uid` y las rutas `res://` exactas.
+
+## Flujo de trabajo
+
+- **Commit automático:** al terminar cada tarea y comprobar que funciona, haz commit sin esperar a que se pida. Incluye los archivos que genera Godot y que acompañan a los cambios (`*.uid`, `*.import`). Si la tarea no funciona o la prueba falla, no hagas commit: explica el problema.
+- Para probar, usa Godot sin ventana: `C:\Users\Administrador\Downloads\Godot_v4.7.2-stable_win64_console.exe --headless --path . --script <prueba.gd>` (antes, `--import` si hay archivos nuevos). Guarda los scripts de prueba fuera del proyecto.
