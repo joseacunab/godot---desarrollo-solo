@@ -4,3 +4,6 @@
 
 # Exportaciones (ejecutables generados)
 build/
+
+# Notas privadas de Claude Code (contraseñas, rutas locales)
+CLAUDE.local.md

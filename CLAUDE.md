@@ -22,7 +22,8 @@ Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en
 - Escena principal (`run/main_scene`): `res://assets/Escenas/inicio.tscn` (pantalla de inicio, que lleva a `principal.tscn`).
 - No hay acciones de input propias: el jugador usa `ui_left`, `ui_right` y `ui_accept`.
 - Autoload `Sonidos` = `res://assets/Escenas/sonidos.tscn` (sección `[autoload]`).
-- `.editorconfig`: UTF-8. `.gitattributes`: finales de línea LF. `.gitignore` excluye `.godot/`, `/android/` y `build/`.
+- `.editorconfig`: UTF-8. `.gitattributes`: finales de línea LF. `.gitignore` excluye `.godot/`, `/android/`, `build/` y `CLAUDE.local.md` (notas privadas, como contraseñas).
+- Importación de texturas ETC2/ASTC activada (`textures/vram_compression/import_etc2_astc=true`), necesaria para Android.
 
 ## Estructura de carpetas
 
@@ -189,9 +190,21 @@ Los marcadores sólo guardan posiciones. Este nivel ya no se usa: `principal.gd`
 
 ## Exportación
 
+### Windows
+
 - `export_presets.cfg`: preset `Windows Desktop` (x86_64), PCK incrustado (`binary_format/embed_pck=true`) y sin consola auxiliar (`debug/export_console_wrapper=0`), así que sale un único `.exe`. Plantillas en `%APPDATA%\Godot\export_templates\4.7.2.stable\`.
 - Exportar (crea antes `build/`): `Godot_v4.7.2-stable_win64_console.exe --headless --path . --export-release "Windows Desktop" "build/El Tesoro de la Jungla.exe"`. Ocupa unos 114 MB; `build/` no se guarda en Git.
 - Comprobar el ejecutable: el `.exe` exportado no escribe en la consola. Usa `--quit-after <frames> --verbose --log-file <ruta>` para que salga solo y deje registro (si se cierra a la fuerza, el registro queda vacío).
+
+### Android
+
+- Herramientas (ya configuradas en las opciones del editor de Godot, `export/android/*`): JDK 17 en `C:\Program Files\Eclipse Adoptium\jdk-17.0.20.8-hotspot` (= `JAVA_HOME`) y SDK en `C:\Android` (= `ANDROID_HOME`). En el SDK hay build-tools 34.0.0, platform android-34, cmdline-tools, platform-tools, NDK 26.1 y CMake 3.22.1.
+- Preset `Android` (`preset.1`): APK sin Gradle (`gradle_build/use_gradle_build=false`), sólo `arm64-v8a`, paquete `com.eltesorodelajungla.juego`, versión 1 / "1.0", firmado. El APK sale con SDK mínimo 24, objetivo 36 y orientación `userLandscape`.
+- `project.godot` necesita `textures/vram_compression/import_etc2_astc=true` para exportar a Android.
+- **Keystore de release:** `C:\Users\Administrador\Documents\claves-android\el-tesoro-de-la-jungla-release.keystore` (PKCS12, alias `eltesoro`), fuera del repositorio. La contraseña está en `CLAUDE.local.md` (no se sube a Git). Godot lee la ruta, el alias y la contraseña de `.godot/export_credentials.cfg` (también fuera de Git); si se borra `.godot/`, hay que volver a ponerlos en el diálogo de exportación.
+- Exportar: `Godot_v4.7.2-stable_win64_console.exe --headless --path . --export-release "Android" "build/El Tesoro de la Jungla.apk"` (unos 32 MB; deja también un `.apk.idsig`).
+- Verificar la firma: `java -jar C:\Android\build-tools\34.0.0\lib\apksigner.jar verify --print-certs <apk>`; la huella SHA-256 debe coincidir con la del keystore (`keytool -list -v`).
+- Aviso al exportar: "Could not find version of build tools that matches Target SDK, using 34.0.0". Falta instalar **Android SDK Build-Tools 36** en el SDK Manager de Android Studio.
 
 ## Flujo de trabajo
 
