@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var jugador: CharacterBody2D = $Jugador
-@onready var marcador: Marker2D = $NivelSelva/Marcadores/Jugador
+@onready var marcador: Marker2D = $NivelLargo/Marcadores/Jugador
 
 
 func _ready() -> void:

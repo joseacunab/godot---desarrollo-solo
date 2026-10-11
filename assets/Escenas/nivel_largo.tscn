@@ -1,0 +1,255 @@
+[gd_scene load_steps=13 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/Fondo/fondo_selva.png" id="1_mlm4j"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/flores1.png" id="2_5kvfr"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/arbusto1.png" id="3_e6ygq"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/flores2.png" id="4_lt3al"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/hongos.png" id="5_duj4x"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/arbusto2.png" id="6_sk45d"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/lianas2.png" id="7_nh33w"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/lianas1.png" id="8_x7t3o"]
+[ext_resource type="Texture2D" path="res://assets/Decoracion/lianas3.png" id="9_h6ptj"]
+[ext_resource type="TileSet" path="res://assets/Tiles/tileset_selva.tres" id="10_jdipx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_21575"]
+size = Vector2(40, 2000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqrb0"]
+size = Vector2(40, 2000)
+
+[node name="NivelLargo" type="Node2D"]
+
+[node name="Fondo" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.3, 1)
+repeat_size = Vector2(1253, 0)
+repeat_times = 3
+
+[node name="Imagen" type="Sprite2D" parent="Fondo"]
+texture = ExtResource("1_mlm4j")
+centered = false
+
+[node name="Decoracion" type="Node2D" parent="."]
+
+[node name="flores1_2" type="Sprite2D" parent="Decoracion"]
+position = Vector2(160, 620)
+texture = ExtResource("2_5kvfr")
+
+[node name="arbusto1_8" type="Sprite2D" parent="Decoracion"]
+position = Vector2(544, 608)
+texture = ExtResource("3_e6ygq")
+
+[node name="flores2_11" type="Sprite2D" parent="Decoracion"]
+position = Vector2(736, 620.5)
+texture = ExtResource("4_lt3al")
+
+[node name="arbusto1_14" type="Sprite2D" parent="Decoracion"]
+position = Vector2(928, 608)
+texture = ExtResource("3_e6ygq")
+
+[node name="flores2_17" type="Sprite2D" parent="Decoracion"]
+position = Vector2(1120, 620.5)
+texture = ExtResource("4_lt3al")
+
+[node name="hongos_20" type="Sprite2D" parent="Decoracion"]
+position = Vector2(1312, 620.5)
+texture = ExtResource("5_duj4x")
+
+[node name="hongos_23" type="Sprite2D" parent="Decoracion"]
+position = Vector2(1504, 620.5)
+texture = ExtResource("5_duj4x")
+
+[node name="arbusto1_35" type="Sprite2D" parent="Decoracion"]
+position = Vector2(2272, 608)
+texture = ExtResource("3_e6ygq")
+
+[node name="flores2_41" type="Sprite2D" parent="Decoracion"]
+position = Vector2(2656, 620.5)
+texture = ExtResource("4_lt3al")
+
+[node name="arbusto1_44" type="Sprite2D" parent="Decoracion"]
+position = Vector2(2848, 544)
+texture = ExtResource("3_e6ygq")
+
+[node name="arbusto1_50" type="Sprite2D" parent="Decoracion"]
+position = Vector2(3232, 480)
+texture = ExtResource("3_e6ygq")
+
+[node name="flores2_53" type="Sprite2D" parent="Decoracion"]
+position = Vector2(3424, 620.5)
+texture = ExtResource("4_lt3al")
+
+[node name="arbusto2_56" type="Sprite2D" parent="Decoracion"]
+position = Vector2(3616, 610)
+texture = ExtResource("6_sk45d")
+
+[node name="hongos_65" type="Sprite2D" parent="Decoracion"]
+position = Vector2(4192, 620.5)
+texture = ExtResource("5_duj4x")
+
+[node name="hongos_77" type="Sprite2D" parent="Decoracion"]
+position = Vector2(4960, 620.5)
+texture = ExtResource("5_duj4x")
+
+[node name="flores1_80" type="Sprite2D" parent="Decoracion"]
+position = Vector2(5152, 556)
+texture = ExtResource("2_5kvfr")
+
+[node name="arbusto2_83" type="Sprite2D" parent="Decoracion"]
+position = Vector2(5344, 546)
+texture = ExtResource("6_sk45d")
+
+[node name="arbusto2_86" type="Sprite2D" parent="Decoracion"]
+position = Vector2(5536, 610)
+texture = ExtResource("6_sk45d")
+
+[node name="arbusto2_89" type="Sprite2D" parent="Decoracion"]
+position = Vector2(5728, 610)
+texture = ExtResource("6_sk45d")
+
+[node name="flores2_95" type="Sprite2D" parent="Decoracion"]
+position = Vector2(6112, 620.5)
+texture = ExtResource("4_lt3al")
+
+[node name="lianas_20" type="Sprite2D" parent="Decoracion"]
+position = Vector2(1312, 611.5)
+texture = ExtResource("7_nh33w")
+
+[node name="lianas_59" type="Sprite2D" parent="Decoracion"]
+position = Vector2(3808, 611.5)
+texture = ExtResource("8_x7t3o")
+
+[node name="lianas_62" type="Sprite2D" parent="Decoracion"]
+position = Vector2(4000, 544.5)
+texture = ExtResource("9_h6ptj")
+
+[node name="lianas_89" type="Sprite2D" parent="Decoracion"]
+position = Vector2(5728, 608.5)
+texture = ExtResource("9_h6ptj")
+
+[node name="Terreno" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAAoAAAABAAAAAAAAAAsAAAADAAEAAAABAAoAAAAAAAAAAAABAAsAAAAAAAEAAAACAAoAAAAAAAAAAAACAAsAAAABAAEAAAADAAoAAAACAAAAAAADAAsAAAADAAEAAAAEAAoAAAABAAAAAAAEAAsAAAABAAEAAAAFAAoAAAADAAAAAAAFAAsAAAACAAEAAAAGAAoAAAABAAAAAAAGAAsAAAACAAEAAAAHAAoAAAABAAAAAAAHAAsAAAABAAEAAAAIAAoAAAADAAAAAAAIAAsAAAABAAEAAAAJAAoAAAADAAAAAAAJAAsAAAADAAEAAAAKAAoAAAADAAAAAAAKAAsAAAABAAEAAAALAAoAAAADAAAAAAALAAsAAAADAAEAAAAMAAoAAAAAAAAAAAAMAAsAAAAEAAEAAAANAAoAAAADAAAAAAANAAsAAAAAAAEAAAAOAAoAAAABAAAAAAAOAAsAAAAAAAEAAAARAAoAAAADAAAAAAARAAsAAAAEAAEAAAASAAoAAAABAAAAAAASAAsAAAAEAAEAAAATAAoAAAAAAAAAAAATAAsAAAACAAEAAAAUAAoAAAACAAAAAAAUAAsAAAAEAAEAAAAVAAoAAAACAAAAAAAVAAsAAAADAAEAAAAWAAoAAAACAAAAAAAWAAsAAAABAAEAAAAXAAoAAAAAAAAAAAAXAAsAAAAAAAEAAAAYAAkAAAABAAAAAAAYAAoAAAAAAAEAAAAYAAsAAAACAAEAAAAZAAkAAAAAAAAAAAAZAAoAAAADAAEAAAAZAAsAAAAAAAEAAAAaAAkAAAACAAAAAAAaAAoAAAAEAAEAAAAaAAsAAAADAAEAAAAbAAkAAAACAAAAAAAbAAoAAAAAAAEAAAAbAAsAAAABAAEAAAAcAAkAAAACAAAAAAAcAAoAAAACAAEAAAAcAAsAAAAEAAEAAAAdAAkAAAAAAAAAAAAdAAoAAAACAAEAAAAdAAsAAAABAAEAAAAeAAoAAAADAAAAAAAeAAsAAAACAAEAAAAfAAoAAAADAAAAAAAfAAsAAAADAAEAAAAgAAoAAAACAAAAAAAgAAsAAAABAAEAAAAhAAoAAAABAAAAAAAhAAsAAAAAAAEAAAAiAAoAAAADAAAAAAAiAAsAAAAEAAEAAAAjAAoAAAABAAMAAAAjAAsAAAADAAEAAAAoAAoAAAABAAMAAAAoAAsAAAACAAEAAAApAAoAAAADAAAAAAApAAsAAAAEAAEAAAAqAAoAAAABAAAAAAAqAAsAAAAAAAEAAAArAAoAAAACAAAAAAArAAsAAAABAAEAAAAsAAkAAAADAAAAAAAsAAoAAAABAAEAAAAsAAsAAAADAAEAAAAtAAkAAAACAAAAAAAtAAoAAAABAAEAAAAtAAsAAAACAAEAAAAuAAgAAAABAAAAAAAuAAkAAAADAAEAAAAuAAoAAAABAAEAAAAuAAsAAAACAAEAAAAvAAgAAAADAAAAAAAvAAkAAAAAAAEAAAAvAAoAAAABAAEAAAAvAAsAAAABAAEAAAAwAAgAAAAAAAAAAAAwAAkAAAAAAAEAAAAwAAoAAAADAAEAAAAwAAsAAAAAAAEAAAAxAAgAAAAAAAAAAAAxAAkAAAADAAEAAAAxAAoAAAABAAEAAAAxAAsAAAACAAEAAAAyAAgAAAACAAAAAAAyAAkAAAADAAEAAAAyAAoAAAABAAEAAAAyAAsAAAADAAEAAAAzAAgAAAABAAAAAAAzAAkAAAACAAEAAAAzAAoAAAAAAAEAAAAzAAsAAAAEAAEAAAA0AAoAAAADAAAAAAA0AAsAAAACAAEAAAA1AAoAAAABAAAAAAA1AAsAAAADAAEAAAA2AAoAAAACAAAAAAA2AAsAAAADAAEAAAA3AAoAAAAAAAAAAAA3AAsAAAAEAAEAAAA4AAoAAAABAAAAAAA4AAsAAAABAAEAAAA5AAoAAAABAAAAAAA5AAsAAAADAAEAAAA/AAoAAAAAAAAAAAA/AAsAAAAAAAEAAABAAAoAAAAAAAAAAABAAAsAAAAAAAEAAABBAAoAAAACAAAAAABBAAsAAAABAAEAAABCAAoAAAADAAAAAABCAAsAAAAAAAEAAABDAAoAAAAAAAAAAABDAAsAAAAEAAEAAABEAAoAAAAAAAAAAABEAAsAAAABAAEAAABFAAoAAAABAAMAAABFAAsAAAADAAEAAABKAAoAAAABAAMAAABKAAsAAAABAAEAAABLAAoAAAACAAAAAABLAAsAAAABAAEAAABMAAoAAAABAAAAAABMAAsAAAAAAAEAAABNAAoAAAABAAAAAABNAAsAAAACAAEAAABOAAoAAAACAAAAAABOAAsAAAABAAEAAABPAAoAAAADAAAAAABPAAsAAAAAAAEAAABQAAkAAAAAAAAAAABQAAoAAAADAAEAAABQAAsAAAACAAEAAABRAAkAAAADAAAAAABRAAoAAAAEAAEAAABRAAsAAAAEAAEAAABSAAkAAAADAAAAAABSAAoAAAAEAAEAAABSAAsAAAABAAEAAABTAAkAAAACAAAAAABTAAoAAAADAAEAAABTAAsAAAABAAEAAABUAAkAAAADAAAAAABUAAoAAAACAAEAAABUAAsAAAAEAAEAAABVAAkAAAABAAAAAABVAAoAAAACAAEAAABVAAsAAAADAAEAAABWAAoAAAACAAAAAABWAAsAAAADAAEAAABXAAoAAAAAAAAAAABXAAsAAAAAAAEAAABYAAoAAAAAAAAAAABYAAsAAAADAAEAAABZAAoAAAADAAAAAABZAAsAAAACAAEAAABaAAoAAAADAAAAAABaAAsAAAAAAAEAAABbAAoAAAACAAAAAABbAAsAAAACAAEAAABcAAoAAAADAAAAAABcAAsAAAABAAEAAABdAAoAAAADAAAAAABdAAsAAAACAAEAAABeAAoAAAADAAAAAABeAAsAAAADAAEAAABfAAoAAAADAAAAAABfAAsAAAACAAEAAABgAAoAAAADAAAAAABgAAsAAAADAAEAAABhAAoAAAACAAAAAABhAAsAAAAAAAEAAABiAAoAAAACAAAAAABiAAsAAAAEAAEAAABjAAoAAAABAAAAAABjAAsAAAAEAAEAAAAkAAoAAAABAAMAAAAlAAoAAAABAAMAAAAmAAoAAAABAAMAAAAnAAoAAAABAAMAAABGAAoAAAABAAMAAABHAAoAAAABAAMAAABIAAoAAAABAAMAAABJAAoAAAABAAMAAAATAAgAAAAFAAAAAAAUAAgAAAAGAAAAAAAVAAgAAAAFAAAAAAA6AAgAAAAFAAAAAAA7AAgAAAAGAAAAAAA9AAcAAAAFAAAAAAA+AAcAAAAGAAAAAABBAAYAAAAEAAAAAABYAAgAAAAFAAAAAABZAAgAAAAGAAAAAABaAAgAAAAFAAAAAAAhAAgAAAACAAIAAAAhAAkAAAABAAIAAAA2AAgAAAACAAIAAAA2AAkAAAAAAAIAAAA3AAcAAAACAAIAAAA3AAgAAAAAAAIAAAA3AAkAAAABAAIAAAA=")
+tile_set = ExtResource("10_jdipx")
+
+[node name="Bordes" type="StaticBody2D" parent="."]
+
+[node name="Izq" type="CollisionShape2D" parent="Bordes"]
+position = Vector2(-20, 384)
+shape = SubResource("RectangleShape2D_21575")
+
+[node name="Der" type="CollisionShape2D" parent="Bordes"]
+position = Vector2(6420, 384)
+shape = SubResource("RectangleShape2D_iqrb0")
+
+[node name="Marcadores" type="Node2D" parent="."]
+
+[node name="Jugador" type="Marker2D" parent="Marcadores"]
+position = Vector2(128, 638)
+
+[node name="Monedas" type="Node2D" parent="Marcadores"]
+
+[node name="Moneda1" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(544, 600)
+
+[node name="Moneda2" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(608, 600)
+
+[node name="Moneda3" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(672, 600)
+
+[node name="Moneda4" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(992, 472)
+
+[node name="Moneda5" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(1056, 472)
+
+[node name="Moneda6" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(1248, 472)
+
+[node name="Moneda7" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(1312, 472)
+
+[node name="Moneda8" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(1376, 472)
+
+[node name="Moneda9" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(1696, 536)
+
+[node name="Moneda10" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(1760, 536)
+
+[node name="Moneda11" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(2400, 600)
+
+[node name="Moneda12" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(2464, 600)
+
+[node name="Moneda13" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(3040, 472)
+
+[node name="Moneda14" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(3104, 472)
+
+[node name="Moneda15" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(3168, 472)
+
+[node name="Moneda16" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(3232, 472)
+
+[node name="Moneda17" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(3808, 472)
+
+[node name="Moneda18" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(4000, 408)
+
+[node name="Moneda19" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(4192, 344)
+
+[node name="Moneda20" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(4576, 600)
+
+[node name="Moneda21" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(4640, 600)
+
+[node name="Moneda22" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(5280, 536)
+
+[node name="Moneda23" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(5344, 536)
+
+[node name="Moneda24" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(5664, 472)
+
+[node name="Moneda25" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(5728, 472)
+
+[node name="Moneda26" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(5792, 472)
+
+[node name="Moneda27" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(6112, 600)
+
+[node name="Moneda28" type="Marker2D" parent="Marcadores/Monedas"]
+position = Vector2(6176, 600)
+
+[node name="Slimes" type="Node2D" parent="Marcadores"]
+
+[node name="Slime1" type="Marker2D" parent="Marcadores/Slimes"]
+position = Vector2(800, 640)
+
+[node name="Slime2" type="Marker2D" parent="Marcadores/Slimes"]
+position = Vector2(1824, 576)
+
+[node name="Slime3" type="Marker2D" parent="Marcadores/Slimes"]
+position = Vector2(3168, 512)
+
+[node name="Slime4" type="Marker2D" parent="Marcadores/Slimes"]
+position = Vector2(4256, 640)
+
+[node name="Slime5" type="Marker2D" parent="Marcadores/Slimes"]
+position = Vector2(5408, 576)
+
+[node name="Slime6" type="Marker2D" parent="Marcadores/Slimes"]
+position = Vector2(5984, 640)
+
+[node name="Meta" type="Marker2D" parent="Marcadores"]
+position = Vector2(6272, 640)

@@ -9,7 +9,7 @@ Plataformero 2D hecho en **Godot 4** (`config/features = "4.7", "Forward Plus"`)
 - **Protagonista:** un explorador. Animaciones `respirar` (reposo), `caminar`, `saltar` y `recoger`.
 - **Enemigos:** slimes y murciélagos.
 - **Objetos:** monedas giratorias para recoger.
-- **Nivel:** la selva, en `assets/escenario/nivel_selva.tscn` (escenario de 1408×768 px).
+- **Nivel:** `assets/Escenas/nivel_largo.tscn` (6400×768 px, TileMapLayer). El antiguo `assets/escenario/nivel_selva.tscn` (1408×768) ya no se usa.
 
 Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en **español**; mantén esa convención.
 
@@ -30,7 +30,8 @@ res://
 ├── icon.svg
 └── assets/
     ├── Escenas/
-    │   ├── principal.tscn        # Escena principal: nivel + jugador
+    │   ├── principal.tscn        # Escena principal: nivel largo + jugador
+│   ├── nivel_largo.tscn      # Nivel actual (6400×768)
     │   ├── jugador.tscn          # Escena del explorador
     │   └── mapa.tscn             # Mapa de prueba antiguo (no se usa)
     ├── Scripts/
@@ -63,23 +64,23 @@ Cada animación existe dos veces: como frames sueltos (`<anim>/<anim>_NN.png`) y
 ### `assets/Escenas/principal.tscn` — escena principal
 ```
 Principal (Node2D, principal.gd)
-├── NivelSelva   instancia de nivel_selva.tscn
+├── NivelLargo   instancia de nivel_largo.tscn
 └── Jugador      instancia de jugador.tscn
 ```
-`principal.gd` coloca al jugador en el marcador `NivelSelva/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
+`principal.gd` coloca al jugador en el marcador `NivelLargo/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
 
 ### `assets/Escenas/jugador.tscn` — el explorador
 ```
 jugador (CharacterBody2D, jugador.gd)
 ├── Sprite2D (AnimatedSprite2D)   escala 0.6, autoplay "respirar"
 ├── CollisionShape2D              CapsuleShape2D r=26, h=88
-└── Camera2D                      límites 0,0 → 1408×768
+└── Camera2D                      límites 0,0 → 6400×768
 ```
 - SpriteFrames embebido: `caminar` (9 frames, 10 fps), `recoger` (7, 10 fps), `respirar` (5, 5 fps), `saltar` (9, 10 fps). Todas en bucle.
 - El script `jugador.gd` está asignado en la raíz de esta escena.
 
 ### `assets/Scripts/jugador.gd`
-- `extends CharacterBody2D`; `SPEED = 300.0`, `JUMP_VELOCITY = -400.0`.
+- `extends CharacterBody2D`; `SPEED = 300.0`, `JUMP_VELOCITY = -550.0`.
 - Gravedad con `get_gravity()`, salto con `ui_accept` sólo en el suelo, voltea el sprite con `flip_h`.
 - Animación: `saltar` si sube en el aire, `caminar` si hay dirección, si no `respirar`. `recoger` todavía no se usa.
 - El nodo de animación se llama `Sprite2D` aunque es un `AnimatedSprite2D` (`@onready var anim = $Sprite2D`).
