@@ -1,0 +1,30 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://assets/Scripts/controles_tactiles.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dfoccglpn1l5w" path="res://assets/ControlesTactiles/boton_izquierda.png" id="2_izq"]
+[ext_resource type="Texture2D" uid="uid://vcjkm1suc6d2" path="res://assets/ControlesTactiles/boton_izquierda_pulsado.png" id="3_izq_p"]
+[ext_resource type="Texture2D" uid="uid://ba245er15xiqk" path="res://assets/ControlesTactiles/boton_derecha.png" id="4_der"]
+[ext_resource type="Texture2D" uid="uid://bkxmvnhwj6scu" path="res://assets/ControlesTactiles/boton_derecha_pulsado.png" id="5_der_p"]
+[ext_resource type="Texture2D" uid="uid://dqduhx2exmrt7" path="res://assets/ControlesTactiles/boton_saltar.png" id="6_sal"]
+[ext_resource type="Texture2D" uid="uid://cq4o42vt2rxj0" path="res://assets/ControlesTactiles/boton_saltar_pulsado.png" id="7_sal_p"]
+
+[node name="ControlesTactiles" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_script")
+
+[node name="Izquierda" type="TouchScreenButton" parent="."]
+texture_normal = ExtResource("2_izq")
+texture_pressed = ExtResource("3_izq_p")
+passby_press = true
+action = "ui_left"
+
+[node name="Derecha" type="TouchScreenButton" parent="."]
+texture_normal = ExtResource("4_der")
+texture_pressed = ExtResource("5_der_p")
+passby_press = true
+action = "ui_right"
+
+[node name="Saltar" type="TouchScreenButton" parent="."]
+texture_normal = ExtResource("6_sal")
+texture_pressed = ExtResource("7_sal_p")
+action = "ui_accept"

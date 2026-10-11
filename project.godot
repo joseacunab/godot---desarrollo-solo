@@ -22,7 +22,8 @@ Sonidos="*res://assets/Escenas/sonidos.tscn"
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep_height"
+window/handheld/orientation=4
 
 [physics]
 

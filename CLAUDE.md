@@ -15,7 +15,8 @@ Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en
 
 ## Configuración (`project.godot`)
 
-- Estiramiento: `canvas_items` / `expand`.
+- Estiramiento: `canvas_items` / `keep_height` (resolución base 1152×648). Nunca deforma: en pantallas más anchas que 16:9 (móviles) se amplía el área visible a lo ancho (p. ej. 1404×648 en 19,5:9); en las más altas (tablets 16:10, 4:3) añade bandas negras arriba y abajo en vez de mostrar el vacío bajo el nivel de 768 px.
+- Orientación en móviles: `window/handheld/orientation=4` (horizontal con sensor: admite girar 180°).
 - Filtro de texturas por defecto: `0` (Nearest, pixel art).
 - Física 3D: Jolt (no afecta al 2D). Renderizador en Windows: D3D12.
 - Escena principal (`run/main_scene`): `res://assets/Escenas/inicio.tscn` (pantalla de inicio, que lleva a `principal.tscn`).
@@ -39,7 +40,8 @@ res://
     │   ├── moneda.tscn           # Area2D, se recoge al tocarla
     │   ├── slime.tscn            # CharacterBody2D que patrulla
     │   ├── meta.tscn             # Area2D con mástil y bandera (fin del nivel)
-    │   └── sonidos.tscn          # Autoload: un AudioStreamPlayer por efecto de sonido
+    │   ├── sonidos.tscn          # Autoload: un AudioStreamPlayer por efecto de sonido
+    │   └── controles_tactiles.tscn  # CanvasLayer con los botones táctiles (sólo en pantallas táctiles)
     ├── Scripts/
     │   ├── inicio.gd             # Botón Jugar / Enter -> principal.tscn
     │   ├── principal.gd          # Coloca al jugador, vidas, zona de muerte, instancia monedas y slimes
@@ -48,6 +50,8 @@ res://
     │   ├── slime.gd              # Patrulla; golpe de costado o aplastamiento
     │   ├── meta.gd               # Emite alcanzada al tocarla el jugador
     │   ├── generar_sonidos.gd    # Sintetiza los .wav de assets/Sonidos/ (se ejecuta a mano)
+    │   ├── generar_controles.gd  # Dibuja las texturas de assets/ControlesTactiles/ (se ejecuta a mano)
+    │   ├── controles_tactiles.gd # Muestra los botones sólo si hay pantalla táctil y los coloca en las esquinas
     │   └── jugador.gd            # Movimiento y animación del jugador
     ├── Personaje principal/      # Sprites del explorador
     │   ├── respirar/  respirar_00..04.png   + respirar_strip.png
@@ -59,6 +63,7 @@ res://
     │   ├── respirar/  slime_respirar_00..02.png
     │   ├── slime_respirar_strip.png
     │   └── slime_frames.tres
+    ├── ControlesTactiles/        # boton_{izquierda,derecha,saltar}[_pulsado].png, 160×160, generados
     ├── Sonidos/                  # Efectos 8 bits generados (22050 Hz, 16 bits, mono)
     │   └── saltar, moneda, golpe, aplastar, caer, meta (.wav)
     ├── Moneda/
@@ -95,13 +100,20 @@ Principal (Node2D, principal.gd)
 ├── Slimes       Node2D: un slime.tscn por marcador de NivelLargo/Marcadores/Slimes
 ├── Meta         instancia de meta.tscn, colocada en NivelLargo/Marcadores/Meta
 ├── Jugador      instancia de jugador.tscn
-└── HUD          instancia de hud.tscn (CanvasLayer, process_mode = Always, fijo en pantalla)
+├── HUD          instancia de hud.tscn (CanvasLayer, process_mode = Always, fijo en pantalla)
+└── ControlesTactiles  instancia de controles_tactiles.tscn (CanvasLayer, capa 2)
 ```
 `principal.gd` coloca al jugador en el marcador `NivelLargo/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
 
 Vidas: `jugador.gd` tiene `var vidas := 3`. `principal.gd` llama a `perder_vida()` al entrar en `NivelLargo/ZonaMuerte` o cuando un slime emite `jugador_golpeado`: resta una vida, hace al jugador invencible (`volverse_invencible()`) y llama a `colocar_jugador()` (marcador + velocidad a cero); si llega a 0 hace `reload_current_scene()`. La zona de muerte quita vida aunque el jugador sea invencible.
 
 Monedas y slimes: las instancias toman el nombre de su marcador (`Moneda1`, `Slime1`...). El marcador de moneda es su centro; el de slime, sus pies (el origen de `slime.tscn` está en la base). Cada slime tiene una excepción de colisión con el jugador: no se empujan, el contacto lo detecta el `Area2D` `Deteccion` del slime.
+
+### Controles táctiles
+- `controles_tactiles.tscn`: tres `TouchScreenButton` (`Izquierda`, `Derecha`, `Saltar`) con `action` = `ui_left`, `ui_right` y `ui_accept`: disparan las mismas acciones que el teclado, así que `jugador.gd` no distingue la entrada. Izquierda y Derecha tienen `passby_press` (se puede deslizar el dedo de uno a otro).
+- `controles_tactiles.gd`: `visible = DisplayServer.is_touchscreen_available()` en `_ready()`; coloca los botones en las esquinas inferiores del área visible (margen 32 px) y los recoloca con `size_changed`.
+- `principal.gd` los oculta al llegar a la meta para no tapar el panel.
+- Los botones de los menús (`Button`) responden al tacto gracias a `emulate_mouse_from_touch` (activo por defecto).
 
 ### Sonidos
 - `assets/Sonidos/*.wav` se generan con `generar_sonidos.gd` (ondas cuadradas con barridos de frecuencia, notas y ruido). Para regenerarlos: `Godot_v4.7.2-stable_win64_console.exe --headless --path . --script res://assets/Scripts/generar_sonidos.gd` y después `--import`.
@@ -186,6 +198,7 @@ Los marcadores sólo guardan posiciones. Este nivel ya no se usa: `principal.gd`
 - **Commit automático:** al terminar cada tarea y comprobar que funciona, haz commit sin esperar a que se pida. Incluye los archivos que genera Godot y que acompañan a los cambios (`*.uid`, `*.import`). Si la tarea no funciona o la prueba falla, no hagas commit: explica el problema.
 - Para probar, usa Godot sin ventana: `C:\Users\Administrador\Downloads\Godot_v4.7.2-stable_win64_console.exe --headless --path . --script <prueba.gd>` (antes, `--import` si hay archivos nuevos). Guarda los scripts de prueba fuera del proyecto.
   - Ejecuta con `timeout 60 ...`: si el script de prueba falla, Godot no sale solo y se queda colgado.
-  - Sin ventana, la ventana mide 64×64 y el viewport visible 1152×1152 (estiramiento `expand`). Para simular clics usa `root.push_input(evento, true)` con coordenadas del viewport.
+  - Sin ventana, la ventana mide 64×64 y el área visible es 1152×648 (`keep_height`, con bandas). Para simular clics usa `root.push_input(evento, true)` con coordenadas del viewport.
+  - Para simular una pantalla táctil: `Input.emulate_touch_from_mouse = true` antes de cargar la escena (así `is_touchscreen_available()` devuelve `true`). Los toques se envían con `Input.parse_input_event(InputEventScreenTouch)` en coordenadas de ventana: `root.get_final_transform() * posicion_viewport`.
   - Sin ventana el audio es un driver ficticio: los `AudioStreamPlayer` se quedan con `playing = true` y nunca terminan. Si la prueba sale con un sonido activo, Godot avisa de una fuga (`AudioStreamWAV` "leaked"); es un efecto de la prueba, no del juego.
   - Después de `reload_current_scene()` la escena vieja queda liberada: comprueba `current_scene` antes de usarla.

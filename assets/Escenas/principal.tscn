@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://assets/Scripts/principal.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/Escenas/nivel_largo.tscn" id="2_nivel"]
 [ext_resource type="PackedScene" uid="uid://k77gwox5cbfq" path="res://assets/Escenas/jugador.tscn" id="3_jugador"]
 [ext_resource type="PackedScene" path="res://assets/Escenas/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" path="res://assets/Escenas/meta.tscn" id="5_meta"]
+[ext_resource type="PackedScene" path="res://assets/Escenas/controles_tactiles.tscn" id="6_controles"]
 
 [node name="Principal" type="Node2D"]
 script = ExtResource("1_script")
@@ -20,3 +21,5 @@ script = ExtResource("1_script")
 [node name="Jugador" parent="." instance=ExtResource("3_jugador")]
 
 [node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="ControlesTactiles" parent="." instance=ExtResource("6_controles")]

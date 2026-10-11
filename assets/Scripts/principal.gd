@@ -71,6 +71,7 @@ func perder_vida() -> void:
 
 func _on_meta_alcanzada() -> void:
 	Sonidos.get_node("Meta").play()
+	$ControlesTactiles.hide()
 	hud.mostrar_nivel_completado(jugador.monedas, total_monedas)
 	# Se pausa todo menos el HUD (diferido, estamos en un callback de física).
 	get_tree().set_deferred("paused", true)
