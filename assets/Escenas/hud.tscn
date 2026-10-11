@@ -73,3 +73,10 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 28
 text = "Volver a jugar"
+
+[node name="Menu" type="Button" parent="NivelCompletado/Centro/Caja"]
+custom_minimum_size = Vector2(260, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 28
+text = "Menú"

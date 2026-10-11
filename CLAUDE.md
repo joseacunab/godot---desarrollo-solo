@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Guía del proyecto **"Juego desarrollado solo"** para Claude Code.
+Guía del proyecto **"El Tesoro de la Jungla"** (`config/name` en `project.godot`; la carpeta del repositorio se llama `juego-desarrollado-solo`) para Claude Code.
 
 ## El juego
 
@@ -81,7 +81,7 @@ Inicio (Node2D, inicio.gd)
 ├── Fondo (Parallax2D)   fondo_selva.png, autoscroll (-40, 0), repeat_size 1253, repeat_times 3
 └── Interfaz (CanvasLayer)
     └── Centro (CenterContainer) / Caja (VBoxContainer)
-        ├── Titulo   "Juego desarrollado solo", 80 px, amarillo con borde
+        ├── Titulo   "El Tesoro de la Jungla", 80 px, amarillo con borde
         └── Jugar    Button
 ```
 - `inicio.gd`: el botón recibe el foco en `_ready()`, así que Enter (`ui_accept`) lo pulsa. Si pierde el foco, `_unhandled_input` también responde a `ui_accept`. Ambos llaman a `change_scene_to_file("res://assets/Escenas/principal.tscn")`.
@@ -111,7 +111,7 @@ Monedas y slimes: las instancias toman el nombre de su marcador (`Moneda1`, `Sli
 ### Meta y fin del nivel
 - **Meta** (Area2D, `meta.gd`): mástil y bandera hechos con `Polygon2D` (no hay sprite), colisión 64×160 con el origen en la base. Al entrar el jugador emite `alcanzada` una sola vez.
 - `principal.gd` la coloca en el marcador `Meta` (6272, 640). Al alcanzarla llama a `hud.mostrar_nivel_completado(jugador.monedas, total_monedas)` y pausa el árbol (`paused = true`, diferido). `total_monedas` es el número de monedas instanciadas (28).
-- El HUD tiene `process_mode = Always`, así que sigue activo en pausa. El panel `NivelCompletado` (ColorRect semitransparente, oculto al empezar) muestra "¡Nivel completado!", "Monedas: N / 28" y el botón `VolverAJugar` (recibe el foco con `grab_focus()`). El botón quita la pausa y llama a `reload_current_scene()`.
+- El HUD tiene `process_mode = Always`, así que sigue activo en pausa. El panel `NivelCompletado` (ColorRect semitransparente, oculto al empezar) muestra "¡Nivel completado!", "Monedas: N / 28" y dos botones: `VolverAJugar` (recibe el foco con `grab_focus()`; quita la pausa y llama a `reload_current_scene()`) y `Menu` (texto "Menú"; quita la pausa y vuelve a `inicio.tscn` con `change_scene_to_file()`).
 
 ### `assets/Escenas/moneda.tscn` y `assets/Escenas/slime.tscn`
 - **Moneda** (Area2D, `moneda.gd`): `AnimatedSprite2D` con `moneda_frames.tres`, animación `girar`, escala 0.25; `CircleShape2D` r=18. Cuando la toca un cuerpo del grupo `jugador`, suma 1 a `monedas` y hace `queue_free()`.
@@ -181,4 +181,5 @@ Los marcadores sólo guardan posiciones. Este nivel ya no se usa: `principal.gd`
 - Para probar, usa Godot sin ventana: `C:\Users\Administrador\Downloads\Godot_v4.7.2-stable_win64_console.exe --headless --path . --script <prueba.gd>` (antes, `--import` si hay archivos nuevos). Guarda los scripts de prueba fuera del proyecto.
   - Ejecuta con `timeout 60 ...`: si el script de prueba falla, Godot no sale solo y se queda colgado.
   - Sin ventana, la ventana mide 64×64 y el viewport visible 1152×1152 (estiramiento `expand`). Para simular clics usa `root.push_input(evento, true)` con coordenadas del viewport.
+  - Sin ventana el audio es un driver ficticio: los `AudioStreamPlayer` se quedan con `playing = true` y nunca terminan. Si la prueba sale con un sonido activo, Godot avisa de una fuga (`AudioStreamWAV` "leaked"); es un efecto de la prueba, no del juego.
   - Después de `reload_current_scene()` la escena vieja queda liberada: comprueba `current_scene` antes de usarla.

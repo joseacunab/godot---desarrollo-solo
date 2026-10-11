@@ -5,10 +5,12 @@ extends CanvasLayer
 @onready var pantalla_final: ColorRect = $NivelCompletado
 @onready var etiqueta_monedas_final: Label = $NivelCompletado/Centro/Caja/MonedasFinal
 @onready var boton_volver: Button = $NivelCompletado/Centro/Caja/VolverAJugar
+@onready var boton_menu: Button = $NivelCompletado/Centro/Caja/Menu
 
 
 func _ready() -> void:
 	boton_volver.pressed.connect(_on_volver_a_jugar_pressed)
+	boton_menu.pressed.connect(_on_menu_pressed)
 
 
 # Muestra las vidas y monedas del jugador y se actualiza cada vez que cambian.
@@ -27,7 +29,7 @@ func _on_monedas_cambiadas(monedas: int) -> void:
 	etiqueta_monedas.text = "Monedas: %d" % monedas
 
 
-# El HUD tiene process_mode = Always, así que el botón funciona con el juego en pausa.
+# El HUD tiene process_mode = Always, así que los botones funcionan con el juego en pausa.
 func mostrar_nivel_completado(monedas: int, total: int) -> void:
 	etiqueta_monedas_final.text = "Monedas: %d / %d" % [monedas, total]
 	pantalla_final.show()
@@ -37,3 +39,8 @@ func mostrar_nivel_completado(monedas: int, total: int) -> void:
 func _on_volver_a_jugar_pressed() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+func _on_menu_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://assets/Escenas/inicio.tscn")
