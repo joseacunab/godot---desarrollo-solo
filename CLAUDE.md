@@ -9,7 +9,7 @@ Plataformero 2D hecho en **Godot 4** (`config/features = "4.7", "Forward Plus"`)
 - **Protagonista:** un explorador. Animaciones `respirar` (reposo), `caminar`, `saltar` y `recoger`.
 - **Enemigos:** slimes y murciélagos.
 - **Objetos:** monedas giratorias para recoger.
-- **Nivel:** `assets/Escenas/nivel_largo.tscn` (6400×768 px, TileMapLayer). El antiguo `assets/escenario/nivel_selva.tscn` (1408×768) ya no se usa.
+- **Nivel:** `assets/Escenas/nivel_largo.tscn` (6400×768 px, TileMapLayer). El antiguo `assets/escenario/nivel_selva.tscn` (1408×768) ya no se usa. Debajo tiene `ZonaMuerte` (Area2D de x 0–6400, y 800–1200).
 
 Todo el proyecto (nombres de nodos, carpetas, animaciones, comentarios) está en **español**; mantén esa convención.
 
@@ -35,7 +35,7 @@ res://
     │   ├── jugador.tscn          # Escena del explorador
     │   └── mapa.tscn             # Mapa de prueba antiguo (no se usa)
     ├── Scripts/
-    │   ├── principal.gd          # Coloca al jugador en su marcador
+    │   ├── principal.gd          # Coloca al jugador, vidas y zona de muerte
     │   └── jugador.gd            # Movimiento y animación del jugador
     ├── Personaje principal/      # Sprites del explorador
     │   ├── respirar/  respirar_00..04.png   + respirar_strip.png
@@ -69,6 +69,8 @@ Principal (Node2D, principal.gd)
 ```
 `principal.gd` coloca al jugador en el marcador `NivelLargo/Marcadores/Jugador` en `_ready()`. El marcador indica dónde van los **pies**: se resta la distancia del centro a la base de la colisión para que no aparezca enterrado en el suelo.
 
+Vidas: `jugador.gd` tiene `var vidas := 3`. Al entrar en `NivelLargo/ZonaMuerte`, `principal.gd` resta una vida y llama a `colocar_jugador()` (marcador + velocidad a cero); si llega a 0 hace `reload_current_scene()`.
+
 ### `assets/Escenas/jugador.tscn` — el explorador
 ```
 jugador (CharacterBody2D, jugador.gd)
@@ -81,6 +83,7 @@ jugador (CharacterBody2D, jugador.gd)
 
 ### `assets/Scripts/jugador.gd`
 - `extends CharacterBody2D`; `SPEED = 300.0`, `JUMP_VELOCITY = -550.0`.
+- `var vidas := 3` (las gestiona `principal.gd`).
 - Gravedad con `get_gravity()`, salto con `ui_accept` sólo en el suelo, voltea el sprite con `flip_h`.
 - Animación: `saltar` si sube en el aire, `caminar` si hay dirección, si no `respirar`. `recoger` todavía no se usa.
 - El nodo de animación se llama `Sprite2D` aunque es un `AnimatedSprite2D` (`@onready var anim = $Sprite2D`).

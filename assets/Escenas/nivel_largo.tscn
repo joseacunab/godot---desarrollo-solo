@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4]
+[gd_scene load_steps=14 format=4]
 
 [ext_resource type="Texture2D" path="res://assets/Fondo/fondo_selva.png" id="1_mlm4j"]
 [ext_resource type="Texture2D" path="res://assets/Decoracion/flores1.png" id="2_5kvfr"]
@@ -16,6 +16,9 @@ size = Vector2(40, 2000)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iqrb0"]
 size = Vector2(40, 2000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_muerte"]
+size = Vector2(6400, 400)
 
 [node name="NivelLargo" type="Node2D"]
 
@@ -139,6 +142,12 @@ shape = SubResource("RectangleShape2D_21575")
 [node name="Der" type="CollisionShape2D" parent="Bordes"]
 position = Vector2(6420, 384)
 shape = SubResource("RectangleShape2D_iqrb0")
+
+[node name="ZonaMuerte" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaMuerte"]
+position = Vector2(3200, 1000)
+shape = SubResource("RectangleShape2D_muerte")
 
 [node name="Marcadores" type="Node2D" parent="."]
 
