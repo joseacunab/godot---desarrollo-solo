@@ -243,7 +243,7 @@ position = Vector2(6176, 600)
 [node name="Slimes" type="Node2D" parent="Marcadores"]
 
 [node name="Slime1" type="Marker2D" parent="Marcadores/Slimes"]
-position = Vector2(800, 640)
+position = Vector2(1500, 640)
 
 [node name="Slime2" type="Marker2D" parent="Marcadores/Slimes"]
 position = Vector2(1824, 576)

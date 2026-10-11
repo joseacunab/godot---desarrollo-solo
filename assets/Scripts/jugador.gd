@@ -5,6 +5,8 @@ const SPEED = 300.0
 const JUMP_VELOCITY = -550.0
 
 const REBOTE_VELOCITY = -400.0
+const TIEMPO_INVENCIBLE = 1.5
+const PERIODO_PARPADEO = 0.2
 
 signal vidas_cambiadas(vidas: int)
 signal monedas_cambiadas(monedas: int)
@@ -19,9 +21,17 @@ var monedas := 0:
 		monedas = valor
 		monedas_cambiadas.emit(monedas)
 
+# Segundos de invencibilidad que quedan (0 = vulnerable).
+var tiempo_invencible := 0.0
+
 @onready var anim = $Sprite2D
 
 func _physics_process(delta: float) -> void:
+	# Mientras es invencible el sprite parpadea.
+	if tiempo_invencible > 0.0:
+		tiempo_invencible = max(tiempo_invencible - delta, 0.0)
+		anim.visible = tiempo_invencible == 0.0 or fmod(tiempo_invencible, PERIODO_PARPADEO) < PERIODO_PARPADEO / 2.0
+
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -54,6 +64,14 @@ func _physics_process(delta: float) -> void:
 func pies_y() -> float:
 	var colision: CollisionShape2D = $CollisionShape2D
 	return colision.global_position.y + colision.shape.get_rect().end.y
+
+
+func volverse_invencible() -> void:
+	tiempo_invencible = TIEMPO_INVENCIBLE
+
+
+func es_invencible() -> bool:
+	return tiempo_invencible > 0.0
 
 
 # Impulso hacia arriba al aplastar a un enemigo.

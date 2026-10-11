@@ -13,7 +13,6 @@ var direccion := -1.0
 
 
 func _ready() -> void:
-	deteccion.body_entered.connect(_on_deteccion_body_entered)
 	_actualizar_detector()
 
 
@@ -28,6 +27,12 @@ func _physics_process(delta: float) -> void:
 		direccion = -direccion
 		_actualizar_detector()
 
+	# Se revisa el contacto cada frame (no sólo al entrar) para que, si el jugador
+	# sigue encima del slime al terminar su invencibilidad, reciba el golpe.
+	for otro in deteccion.get_overlapping_bodies():
+		if otro.is_in_group("jugador"):
+			_tocar_jugador(otro)
+
 
 func _actualizar_detector() -> void:
 	# El rayo mira hacia abajo justo delante del slime, en el sentido de la marcha.
@@ -35,13 +40,11 @@ func _actualizar_detector() -> void:
 	detector_borde.position.x = direccion * (medio_ancho + 4.0)
 
 
-func _on_deteccion_body_entered(otro: Node2D) -> void:
-	if not otro.is_in_group("jugador"):
-		return
+func _tocar_jugador(jugador: CharacterBody2D) -> void:
 	# Si el jugador cae y sus pies están por encima del centro del slime, lo aplasta.
 	var centro_y := cuerpo.global_position.y
-	if otro.velocity.y > 0.0 and otro.pies_y() < centro_y:
-		otro.rebotar()
+	if jugador.velocity.y > 0.0 and jugador.pies_y() < centro_y:
+		jugador.rebotar()
 		queue_free()
-	else:
+	elif not jugador.es_invencible():
 		jugador_golpeado.emit()

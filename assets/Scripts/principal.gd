@@ -53,6 +53,8 @@ func perder_vida() -> void:
 		# Sin vidas: se reinicia el nivel (diferido, estamos en un callback de física).
 		get_tree().reload_current_scene.call_deferred()
 	else:
+		# Invencible desde ya, para que otro slime no lo golpee en este mismo frame.
+		jugador.volverse_invencible()
 		colocar_jugador.call_deferred()
 
 
